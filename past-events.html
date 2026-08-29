@@ -63,6 +63,10 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
   display:flex; align-items:center; justify-content:space-between;
 }
 .nav-logo{color:var(--paper);text-decoration:none;}
+.nav-logo img {
+  max-height: 36px;
+  width: auto;
+}
 .nav-links{display:flex; gap:36px;}
 .nav-links a{
   color:var(--paper); opacity:.75; font-size:14px; font-weight:500;
@@ -744,7 +748,7 @@ body {
         <p class="year-description">Archive section for TEDxIIMKashipur 2018.</p>
       </div>
     </div>
-    <div class="video-grid" style="grid-template-columns: 1fr;">
+    <div class="video-grid">
       <div class="video-card">
         <div class="video-frame">
           <iframe src="https://www.youtube.com/embed/Pin4kkZFy8Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -768,7 +772,7 @@ body {
         <p class="year-description">Archive section for TEDxIIMKashipur 2016.</p>
       </div>
     </div>
-    <div class="video-grid" style="grid-template-columns: 1fr;">
+    <div class="video-grid">
       <div class="video-card">
         <div class="video-frame">
           <iframe src="https://www.youtube.com/embed/mVXtXYJju0s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -833,7 +837,6 @@ body {
       <div class="video-frame">
           <iframe width="560" height="315" src="https://www.youtube.com/embed/Z0okXQdsPKs?si=DDZMDlxkDV4Rb8FU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <div class="video-card">
         <div class="video-caption">
           <span>TALK</span>
           <strong>Ritu Arora: Lessons for life from A Cup of Tea </strong>
