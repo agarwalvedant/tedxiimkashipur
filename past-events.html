@@ -364,6 +364,51 @@ body {
     grid-template-columns:1fr;
   }
 }
+
+/* Year filter dropdown */
+.year-filter{
+  margin-top:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.year-filter label{
+  color:#999;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:12px;
+  font-weight:700;
+}
+
+.year-filter select{
+  appearance:none;
+  -webkit-appearance:none;
+  background:#0a0a0a;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:4px;
+  padding:12px 42px 12px 18px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23EB0028' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 16px center;
+  transition:border-color .2s ease;
+}
+
+.year-filter select:hover,
+.year-filter select:focus{
+  border-color:#EB0028;
+  outline:none;
+}
+
+.year-section[hidden]{
+  display:none !important;
+}
 </style>
 </head>
 <body>
@@ -389,6 +434,22 @@ body {
     <div class="eyebrow">THE ARCHIVE</div>
     <h1>Past <span>Events</span></h1>
     <p>Explore the TEDxIIMKashipur journey through previous editions, their themes, speakers, talks and video highlights.</p>
+
+    <div class="year-filter">
+      <label for="yearSelect">Jump to year</label>
+      <select id="yearSelect">
+        <option value="all">All Years</option>
+        <option value="year-2026">2025</option>
+        <option value="year-2025">2024</option>
+        <option value="year-2024">2023</option>
+        <option value="year-2021">2021</option>
+        <option value="year-2019">2019</option>
+        <option value="year-2018">2018</option>
+        <option value="year-2016">2016</option>
+        <option value="year-2015">2015</option>
+        <option value="year-2014">2014</option>
+      </select>
+    </div>
   </div>
 </header>
 
@@ -689,7 +750,7 @@ body {
       </div>
        <div class="video-card">
         <div class="video-frame">
-          <<iframe width="560" height="315" src="https://www.youtube.com/embed/JF8PKzWDvvo?si=eDGNtIuvxmRZYYTS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>Ashish Joshi
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/JF8PKzWDvvo?si=eDGNtIuvxmRZYYTS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-caption">
           <span>TALK</span>
@@ -724,8 +785,7 @@ body {
           <strong>Jo McGowan Chopra: Just leap, the net will appear!</strong>
         </div>
       </div>
-    </div>
-    <div class="video-card">
+      <div class="video-card">
         <div class="video-frame">
           <iframe width="560" height="315" src="https://www.youtube.com/embed/YuWwI2mxLJw?si=um9i0o1hiJLLZXvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
@@ -990,6 +1050,44 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => na
       }
     } catch (err) {
       console.warn('Could not configure YouTube iframe origin:', err);
+    }
+  });
+</script>
+
+<script>
+  // Year filter: show only the selected year's section, or all of them
+  const yearSelect = document.getElementById('yearSelect');
+  const yearSections = document.querySelectorAll('.year-section');
+
+  function applyYearFilter(value){
+    yearSections.forEach(sec => {
+      if(value === 'all' || sec.id === value){
+        sec.hidden = false;
+      } else {
+        sec.hidden = true;
+      }
+    });
+  }
+
+  yearSelect.addEventListener('change', (e) => {
+    const value = e.target.value;
+    applyYearFilter(value);
+    if(value !== 'all'){
+      const target = document.getElementById(value);
+      if(target){
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    } else {
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+  });
+
+  // Support linking directly to a year via URL hash, e.g. past-events.html#year-2024
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.replace('#','');
+    if(hash && document.getElementById(hash)){
+      yearSelect.value = hash;
+      applyYearFilter(hash);
     }
   });
 </script>
