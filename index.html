@@ -71,7 +71,6 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
 .nav-links a{
   color:var(--paper); opacity:.75; font-size:14px; font-weight:500;
   position:relative; padding:4px 8px; transition:opacity .2s, color .2s;
-  
 }
 .nav-links a:hover{opacity:1;}
 .nav-links a::after{
@@ -114,17 +113,10 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
 }
 
 /* HERO */
-/* HERO */
 .hero{
   position:relative;
   min-height:100vh;
-  /* Option A: Pure image (sharpest detail) */
   background-image: url("asa.png");
-  
-  /* Option B: Subtle top/bottom fade for readability (uncomment if text is hard to read)
-  background-image: linear-gradient(180deg, rgba(11, 11, 10, 0.4) 0%, rgba(11, 11, 10, 0.8) 100%), url("asa.png"); 
-  */
-
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -257,14 +249,19 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
   .event-card{width:230px;}
 }
 
-/* SPEAKERS SECTION */
+/* SPEAKERS SECTION - ONE-LINE HORIZONTAL SLIDER WITH NAVIGATION ARROWS */
 .speakers{
   padding:100px 0;
   background: linear-gradient(180deg, #0b0b0a 0%, #2b0505 50%, #0b0b0a 100%);
   position:relative;
+  overflow:hidden;
+}
+.speakers .wrap{
+  position:relative;
+  z-index:2;
 }
 .speakers .section-head{
-  margin-bottom:60px;
+  margin-bottom:40px;
   border-bottom:1px solid rgba(230, 43, 30, 0.2);
   padding-bottom:24px;
 }
@@ -276,28 +273,103 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
 .speakers .section-head h2 span{
   color:var(--tedx-red);
 }
-.speakers-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-  gap:24px;
+
+/* Slider Wrapper & Controls */
+.speakers-slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
-.speaker-card{
+
+.speakers-slider-viewport {
+  width: 100%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 24px 10px;
+  /* Hide Scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.speakers-slider-viewport::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+.speakers-slider-track {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  width: max-content;
+}
+
+.speaker-card {
+  flex: 0 0 250px; /* Fixed width in a single horizontal row */
   background: var(--card-gradient);
-  border:1px solid rgba(230, 43, 30, 0.2);
-  border-radius:4px;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  cursor:pointer;
-  transition:transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(230, 43, 30, 0.2);
+  border-radius: 4px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
-.speaker-card:hover{
-  transform:translateY(-6px);
-  border-color:var(--tedx-red);
-  box-shadow: 0 10px 25px rgba(230, 43, 30, 0.25);
+
+/* Focus & Dim Effect on Hover */
+.speakers-slider-track:hover .speaker-card {
+  opacity: 0.3;
+  filter: grayscale(50%) blur(0.5px);
+  transform: scale(0.95);
 }
+
+.speakers-slider-track .speaker-card:hover {
+  opacity: 1 !important;
+  filter: grayscale(0%) blur(0px) !important;
+  transform: translateY(-8px) scale(1.08) !important;
+  border-color: var(--tedx-red);
+  box-shadow: 0 12px 30px rgba(235, 0, 40, 0.45);
+  z-index: 10;
+}
+
+/* Arrow Navigation Buttons */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: rgba(11, 11, 10, 0.85);
+  border: 1px solid var(--tedx-red);
+  color: var(--paper);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  backdrop-filter: blur(4px);
+  user-select: none;
+}
+
+.slider-arrow:hover {
+  background: var(--tedx-red);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(235, 0, 40, 0.6);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.slider-arrow.prev {
+  left: -24px;
+}
+
+.slider-arrow.next {
+  right: -24px;
+}
+
 .speaker-img-wrapper{
   position:relative;
   width:110px;
@@ -314,11 +386,9 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
   width:100%;
   height:100%;
   object-fit:cover;
-  filter:grayscale(30%);
-  transition:filter 0.3s ease, transform 0.3s ease;
+  transition:transform 0.3s ease;
 }
 .speaker-card:hover .speaker-img-wrapper img{
-  filter:grayscale(0%);
   transform:scale(1.08);
 }
 .speaker-topic{
@@ -340,6 +410,12 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
   font-size:12px;
   color:var(--stone);
   line-height:1.4;
+}
+
+@media (max-width: 768px){
+  .slider-arrow.prev { left: -10px; }
+  .slider-arrow.next { right: -10px; }
+  .speaker-card { flex: 0 0 210px; }
 }
 
 /* SPEAKER MODAL */
@@ -457,6 +533,60 @@ h1,h2,h3{font-family:Arial,Inter,sans-serif;letter-spacing:-0.01em;}
   .modal-body{
     padding:24px;
     text-align:center;
+  }
+}
+
+/* ABOUT SECTION */
+.about{
+  padding:100px 0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  background: linear-gradient(180deg, #0b0b0a 0%, #200404 50%, #0b0b0a 100%);
+  border-top:1px solid rgba(230, 43, 30, 0.2);
+  border-bottom:1px solid rgba(230, 43, 30, 0.2);
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+  align-items:stretch;
+}
+.about-card{
+  background: var(--card-gradient);
+  border:1px solid rgba(230, 43, 30, 0.25);
+  border-radius:4px;
+  padding:36px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.about-card h3{
+  font-size:24px;
+  font-weight:700;
+  color:var(--paper);
+  margin-bottom:18px;
+  border-bottom:2px solid var(--tedx-red);
+  padding-bottom:8px;
+}
+.about-card p{
+  font-size:13.5px;
+  line-height:1.65;
+  color:rgba(247,245,239,0.85);
+  margin-bottom:14px;
+}
+.about-card p:last-child{
+  margin-bottom:0;
+}
+
+@media (max-width: 900px){
+  .about{
+    min-height:auto;
+    padding:70px 0;
+  }
+  .about-grid{
+    grid-template-columns:1fr;
   }
 }
 
@@ -580,8 +710,7 @@ footer{
 
 @media (max-width:700px){ .footer-top{flex-direction:column;} }
 
-
-/* OFFICIAL TEDx EVENT LOGO — supplied asset: logo-white.png */
+/* OFFICIAL TEDx EVENT LOGO */
 .nav-logo{display:flex;align-items:center;background:#000;padding:7px 10px;}
 .nav-logo img{display:block;width:auto;height:42px;max-width:220px;object-fit:contain;}
 .hero-official-logo{
@@ -610,7 +739,7 @@ footer{
   .footer-logo img{height:42px;max-width:220px;}
 }
 
-/* FINAL TEDx HERO: complete black top section */
+/* FINAL TEDx HERO */
 :root{
   --tedx-red:#EB0028;
 }
@@ -672,7 +801,6 @@ header{
   display:none !important;
 }
 
-/* Keep the event information cleanly below the official logo. */
 .hero-meta,
 .hero-details,
 .hero-info{
@@ -700,10 +828,10 @@ header{
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#home" class="active">Home</a></li>
-            <li><a href="past-events.html">Past Events</a></li>
+      <li><a href="past-events.html">Past Events</a></li>
       <li><a href="#speakers">Speakers</a></li>
+      <li><a href="#about">About</a></li>
       <li><a href="#sponsors">Sponsors</a></li>
-
       <li><a href="#register" class="nav-cta">Register</a></li>
     </ul>
   </div>
@@ -712,8 +840,6 @@ header{
 <header class="hero" id="home">
   <div class="hero-content">
     <div class="hero-official-logo"><img src="logo-white.png" alt="TEDxIIMKashipur official event logo"></div>
-    
-
     <div class="hero-meta">
       <div class="hero-meta-item">
         <span class="hero-meta-label">DATE</span>
@@ -756,7 +882,7 @@ header{
   </div>
 </section>
 
-<!-- SPEAKERS SECTION -->
+<!-- SPEAKERS SECTION IN ONE HORIZONTAL ROW WITH SLIDER ARROWS -->
 <section class="speakers" id="speakers">
   <div class="wrap">
     <div class="section-head">
@@ -765,174 +891,157 @@ header{
         <h2>Meet Our <span>Speakers</span></h2>
       </div>
     </div>
-    <div class="speakers-grid">
-      
-      <!-- Speaker 1 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 1" 
-           data-title="Dolor Sit Amet" 
-           data-topic="Consectetur Adipiscing" 
-           data-img="speaker1.jpg" 
-           data-bio="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker1.jpg" alt="Speaker Portrait">
+    
+    <div class="speakers-slider-wrapper">
+      <!-- Arrow Left -->
+      <button class="slider-arrow prev" id="speakerPrev" aria-label="Previous Speakers">&#10094;</button>
+
+      <!-- Viewport & Track -->
+      <div class="speakers-slider-viewport" id="speakersViewport">
+        <div class="speakers-slider-track">
+          
+          <!-- 1. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 1" 
+               data-title="Dolor Sit Amet" 
+               data-topic="Consectetur Adipiscing" 
+               data-img="speaker1.jpg" 
+               data-bio="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker1.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Consectetur Adipiscing</span>
+            <h3 class="speaker-name">Lorem Ipsum 1</h3>
+            <p class="speaker-title">Dolor Sit Amet</p>
+          </div>
+
+          <!-- 2. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 2" 
+               data-title="Sed Do Eiusmod" 
+               data-topic="Tempor Incididunt" 
+               data-img="speaker2.jpg" 
+               data-bio="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker2.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Tempor Incididunt</span>
+            <h3 class="speaker-name">Lorem Ipsum 2</h3>
+            <p class="speaker-title">Sed Do Eiusmod</p>
+          </div>
+
+          <!-- 3. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 3" 
+               data-title="Labore Et Dolore" 
+               data-topic="Magna Aliqua" 
+               data-img="speaker3.jpg" 
+               data-bio="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker3.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Magna Aliqua</span>
+            <h3 class="speaker-name">Lorem Ipsum 3</h3>
+            <p class="speaker-title">Labore Et Dolore</p>
+          </div>
+
+          <!-- 4. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 4" 
+               data-title="Ut Enim Ad Minim" 
+               data-topic="Quis Nostrud" 
+               data-img="speaker4.jpg" 
+               data-bio="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker4.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Quis Nostrud</span>
+            <h3 class="speaker-name">Lorem Ipsum 4</h3>
+            <p class="speaker-title">Ut Enim Ad Minim</p>
+          </div>
+
+          <!-- 5. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 5" 
+               data-title="Ullamco Laboris" 
+               data-topic="Nisi Ut Aliquip" 
+               data-img="speaker5.jpg" 
+               data-bio="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker5.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Nisi Ut Aliquip</span>
+            <h3 class="speaker-name">Lorem Ipsum 5</h3>
+            <p class="speaker-title">Ullamco Laboris</p>
+          </div>
+
+          <!-- 6. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 6" 
+               data-title="Commodo Consequat" 
+               data-topic="Duis Aute Irure" 
+               data-img="speaker6.jpg" 
+               data-bio="Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker6.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Duis Aute Irure</span>
+            <h3 class="speaker-name">Lorem Ipsum 6</h3>
+            <p class="speaker-title">Commodo Consequat</p>
+          </div>
+
+          <!-- 7. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 7" 
+               data-title="Voluptate Velit" 
+               data-topic="Cillum Dolore" 
+               data-img="speaker7.jpg" 
+               data-bio="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker7.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Cillum Dolore</span>
+            <h3 class="speaker-name">Lorem Ipsum 7</h3>
+            <p class="speaker-title">Voluptate Velit</p>
+          </div>
+
+          <!-- 8. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 8" 
+               data-title="Fugiat Nulla" 
+               data-topic="Excepteur Sint" 
+               data-img="speaker8.jpg" 
+               data-bio="Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker8.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Excepteur Sint</span>
+            <h3 class="speaker-name">Lorem Ipsum 8</h3>
+            <p class="speaker-title">Fugiat Nulla</p>
+          </div>
+
+          <!-- 9. Speaker Card -->
+          <div class="speaker-card" 
+               data-name="Lorem Ipsum 9" 
+               data-title="Occaecat Cupidatat" 
+               data-topic="Sunt In Culpa" 
+               data-img="speaker9.jpg" 
+               data-bio="Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.">
+            <div class="speaker-img-wrapper">
+              <img src="speaker9.jpg" alt="Speaker Portrait">
+            </div>
+            <span class="speaker-topic">Sunt In Culpa</span>
+            <h3 class="speaker-name">Lorem Ipsum 9</h3>
+            <p class="speaker-title">Occaecat Cupidatat</p>
+          </div>
+
         </div>
-        <span class="speaker-topic">Consectetur Adipiscing</span>
-        <h3 class="speaker-name">Lorem Ipsum 1</h3>
-        <p class="speaker-title">Dolor Sit Amet</p>
       </div>
 
-      <!-- Speaker 2 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 2" 
-           data-title="Sed Do Eiusmod" 
-           data-topic="Tempor Incididunt" 
-           data-img="speaker2.jpg" 
-           data-bio="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker2.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Tempor Incididunt</span>
-        <h3 class="speaker-name">Lorem Ipsum 2</h3>
-        <p class="speaker-title">Sed Do Eiusmod</p>
-      </div>
-
-      <!-- Speaker 3 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 3" 
-           data-title="Labore Et Dolore" 
-           data-topic="Magna Aliqua" 
-           data-img="speaker3.jpg" 
-           data-bio="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker3.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Magna Aliqua</span>
-        <h3 class="speaker-name">Lorem Ipsum 3</h3>
-        <p class="speaker-title">Labore Et Dolore</p>
-      </div>
-
-      <!-- Speaker 4 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 4" 
-           data-title="Ut Enim Ad Minim" 
-           data-topic="Quis Nostrud" 
-           data-img="speaker4.jpg" 
-           data-bio="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker4.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Quis Nostrud</span>
-        <h3 class="speaker-name">Lorem Ipsum 4</h3>
-        <p class="speaker-title">Ut Enim Ad Minim</p>
-      </div>
-
-      <!-- Speaker 5 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 5" 
-           data-title="Ullamco Laboris" 
-           data-topic="Nisi Ut Aliquip" 
-           data-img="speaker5.jpg" 
-           data-bio="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker5.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Nisi Ut Aliquip</span>
-        <h3 class="speaker-name">Lorem Ipsum 5</h3>
-        <p class="speaker-title">Ullamco Laboris</p>
-      </div>
-
-      <!-- Speaker 6 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 6" 
-           data-title="Commodo Consequat" 
-           data-topic="Duis Aute Irure" 
-           data-img="speaker6.jpg" 
-           data-bio="Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker6.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Duis Aute Irure</span>
-        <h3 class="speaker-name">Lorem Ipsum 6</h3>
-        <p class="speaker-title">Commodo Consequat</p>
-      </div>
-
-      <!-- Speaker 7 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 7" 
-           data-title="Voluptate Velit" 
-           data-topic="Cillum Dolore" 
-           data-img="speaker7.jpg" 
-           data-bio="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker7.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Cillum Dolore</span>
-        <h3 class="speaker-name">Lorem Ipsum 7</h3>
-        <p class="speaker-title">Voluptate Velit</p>
-      </div>
-
-      <!-- Speaker 8 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 8" 
-           data-title="Fugiat Nulla" 
-           data-topic="Excepteur Sint" 
-           data-img="speaker8.jpg" 
-           data-bio="Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker8.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Excepteur Sint</span>
-        <h3 class="speaker-name">Lorem Ipsum 8</h3>
-        <p class="speaker-title">Fugiat Nulla</p>
-      </div>
-
-      <!-- Speaker 9 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 9" 
-           data-title="Occaecat Cupidatat" 
-           data-topic="Sunt In Culpa" 
-           data-img="speaker9.jpg" 
-           data-bio="Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker9.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Sunt In Culpa</span>
-        <h3 class="speaker-name">Lorem Ipsum 9</h3>
-        <p class="speaker-title">Occaecat Cupidatat</p>
-      </div>
-
-      <!-- Speaker 10 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 10" 
-           data-title="Officia Deserunt" 
-           data-topic="Mollit Anim" 
-           data-img="speaker10.jpg" 
-           data-bio="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.">
-        <div class="speaker-img-wrapper">
-          <img src="speaker10.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Mollit Anim</span>
-        <h3 class="speaker-name">Lorem Ipsum 10</h3>
-        <p class="speaker-title">Officia Deserunt</p>
-      </div>
-
-      <!-- Speaker 11 -->
-      <div class="speaker-card" 
-           data-name="Lorem Ipsum 11" 
-           data-title="Id Est Laborum" 
-           data-topic="Perspiciatis Unde" 
-           data-img="speaker11.jpg" 
-           data-bio="Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?">
-        <div class="speaker-img-wrapper">
-          <img src="speaker11.jpg" alt="Speaker Portrait">
-        </div>
-        <span class="speaker-topic">Perspiciatis Unde</span>
-        <h3 class="speaker-name">Lorem Ipsum 11</h3>
-        <p class="speaker-title">Id Est Laborum</p>
-      </div>
-
+      <!-- Arrow Right -->
+      <button class="slider-arrow next" id="speakerNext" aria-label="Next Speakers">&#10095;</button>
     </div>
+
   </div>
 </section>
 
@@ -951,6 +1060,28 @@ header{
     </div>
   </div>
 </div>
+
+<!-- ABOUT SECTION -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      
+      <!-- Left: About TED -->
+      <div class="about-card">
+        <h3>About TED</h3>
+        <p>TED is a nonprofit, nonpartisan organization devoted to discovering, exploring and sharing core ideas in the form of short, powerful talks. Today, TED shares ideas from a broad spectrum of disciplines science, business, education, arts, design, global issues, technology, development and entertainment.</p>
+        <p>TED is a global community, welcoming people from every discipline and culture who seek a deeper understanding of the world. We believe passionately in the power of ideas to change attitudes, lives and, ultimately, the world. On TED.com, we're building a clearinghouse of free knowledge from the world's most inspired thinkers - and a community of curious souls to engage with ideas and each other, both online and at TED and TEDx events around the world, all year long.</p>
+      </div>
+
+      <!-- Right: About TEDx -->
+      <div class="about-card">
+        <h3>About TEDx, x = independently organized event</h3>
+        <p>In the spirit of ideas worth spreading, TEDx is a program of local, self-organized events that bring people together to share a TED-like experience. At a TEDx event, TED Talks video and live speakers combine to spark deep discussion and connection. These local, self-organized events are branded TEDx, where x = independently organized TED event. The TED Conference provides general guidance for the TEDx program, but individual TEDx events are self-organized. (Subject to certain rules and regulations.)</p>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <section class="section sponsors" id="sponsors">
   <div class="wrap">
@@ -1043,6 +1174,7 @@ header{
           <h4>Explore</h4>
           <a href="#home">Home</a>
           <a href="#speakers">Speakers</a>
+          <a href="#about">About</a>
           <a href="#sponsors">Sponsors</a>
           <a href="#past-events">Past Events</a>
         </div>
@@ -1092,6 +1224,20 @@ header{
   }, observerOptions);
 
   sections.forEach(section => observer.observe(section));
+
+  // Speaker Horizontal Slider Arrow Controls
+  const speakersViewport = document.getElementById('speakersViewport');
+  const speakerPrev = document.getElementById('speakerPrev');
+  const speakerNext = document.getElementById('speakerNext');
+
+  if (speakersViewport && speakerPrev && speakerNext) {
+    speakerPrev.addEventListener('click', () => {
+      speakersViewport.scrollBy({ left: -280, behavior: 'smooth' });
+    });
+    speakerNext.addEventListener('click', () => {
+      speakersViewport.scrollBy({ left: 280, behavior: 'smooth' });
+    });
+  }
 
   // Speaker Modal Functionality
   const modal = document.getElementById('speakerModal');
